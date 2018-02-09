@@ -6,16 +6,28 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" v-on:click='load'>
+        <li class="nav-item active" v-on:click='loadData'>
+          <a class="nav-link text-light" href="#"> 本地文件 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='serverData'>
+          <a class="nav-link text-light" href="#"> 远程文件 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link text-light" href="#"> 前一页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link text-light" href="#"> 后一页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='edit'>
           <a class="nav-link text-light" href="#"> 编辑数据 <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active" v-on:click='show'>
           <a class="nav-link text-light" href="#"> 显示图表 <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active" v-on:click='load'>
+        <li class="nav-item active" v-on:click='compare'>
           <a class="nav-link text-light" href="#"> 加入对比 <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active" v-on:click='load'>
+        <li class="nav-item active" v-on:click='showCompare'>
           <a class="nav-link text-light" href="#"> 显示对比 <span class="sr-only">(current)</span></a>
         </li>
       </ul>
@@ -35,12 +47,24 @@
       };
     },
     methods: {
-      load: function () {
+      loadData: function () {
+        this.$store.commit('STAT_LOAD_FILES');
+      },
+      serverData: function () {
+        this.$store.commit('STAT_SERVER_FILES');
+      },
+      edit: function () {
         this.$router.push('/edit');
       },
       show: function () {
         this.showChart1()
         this.showChart2()
+      },
+      compare: function () {
+
+      },
+      showCompare: function () {
+
       },
       showChart1() {
         // 基于准备好的dom，初始化echarts实例

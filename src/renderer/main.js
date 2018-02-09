@@ -28,29 +28,47 @@ new Vue({
 //   hitbdata.push(message)
 //   console.log(hitbdata)
 // })
-// 读取系统初始化文件
+
+// 文件保存位置
 const fs = require('fs');
 const path = require('path');
+const hitbdata = path.join(process.env.USERPROFILE, '\\clinet-data');
+if (!fs.existsSync(hitbdata)) { fs.mkdirSync(hitbdata) }
+const hitbdataSystem = path.join(process.env.USERPROFILE, '\\clinet-data\\system');
+if (!fs.existsSync(hitbdataSystem)) { fs.mkdirSync(hitbdataSystem) }
+const hitbdataLoaded = path.join(process.env.USERPROFILE, '\\clinet-data\\loaded');
+if (!fs.existsSync(hitbdataLoaded)) { fs.mkdirSync(hitbdataLoaded) }
+const hitbdataCompare = path.join(process.env.USERPROFILE, '\\clinet-data\\compare');
+if (!fs.existsSync(hitbdataCompare)) { fs.mkdirSync(hitbdataCompare) }
+const hitbdataUser = path.join(process.env.USERPROFILE, '\\clinet-data\\user');
+if (!fs.existsSync(hitbdataUser)) { fs.mkdirSync(hitbdataUser) }
+const hitbdataLibrary = path.join(process.env.USERPROFILE, '\\clinet-data\\library');
+if (!fs.existsSync(hitbdataLibrary)) { fs.mkdirSync(hitbdataLibrary) }
+const hitbdataStat = path.join(process.env.USERPROFILE, '\\clinet-data\\stat');
+if (!fs.existsSync(hitbdataStat)) { fs.mkdirSync(hitbdataStat) }
+
+
+// 读取系统初始化文件
 const readline = require('readline');
-const hitbdata = []
-const file = path.format({ dir: 'C:\\hitbdata\\system\\hitb_table.csv' });
 global.hitbdata = {};
+
+const file = path.format({ dir: 'C:\\hitbdata\\system\\hitb_table.csv' });
+
 if(fs.existsSync(file)){
   const fRead = fs.createReadStream(file);
   const fReadline = readline.createInterface({ input: fRead });
-  const f = [];
-  const table = {};
+  const f = []; // 将CSV文件逐行读到数组中
+  const t = {}; // 将数组逐行转换为js对象
   
   fReadline.on('close', () => {
-    // 将初始化数据转换为js对象
     f.shift();
     f.forEach((line)=>{
       let x = line.split(',');
-      if(!table[x[0]]){table[x[0]] = [];}
+      if(!t[x[0]]){t[x[0]] = [];}
       const a = x.shift();
-      table[a].push(x);
+      t[a].push(x);
     })
-    global.hitbdata['table'] = table;
+    global.hitbdata['table'] = t;
   });
 
   fReadline.on('line', (line) => {

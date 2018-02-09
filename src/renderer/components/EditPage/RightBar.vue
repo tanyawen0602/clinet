@@ -6,6 +6,18 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
+        <li class="nav-item active" v-on:click='loadData'>
+          <a class="nav-link text-light" href="#"> 本地文件 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='serverData'>
+          <a class="nav-link text-light" href="#"> 远程文件 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link text-light" href="#"> 前一页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link text-light" href="#"> 后一页 <span class="sr-only">(current)</span></a>
+        </li>
         <li class="nav-item active">
           <a class="nav-link text-light" href="#"> 帮助 <span class="sr-only">(current)</span></a>
         </li>
@@ -22,9 +34,6 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -43,16 +52,11 @@
       };
     },
     methods: {
-      created: function () {
-        this.$nextTick(function () {
-          this.timer()
-        })
+      loadData: function () {
+        this.$store.commit('EDIT_LOAD_FILES');
       },
-      timer: function () {
-        this.getTime = () => {
-          this.currentTime = new Date().toLocaleString();
-        }
-        setInterval(this.getTime, 1000);
+      serverData: function () {
+        this.$store.commit('EDIT_SERVER_FILES');
       },
     },
   };

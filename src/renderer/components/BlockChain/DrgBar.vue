@@ -6,14 +6,23 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" v-on:click='getFiles'>
-          <a class="nav-link text-light" href="#"> 选择CSV文件 <span class="sr-only">(current)</span></a>
+        <li class="nav-item active" v-on:click='getTables'>
+          <a class="nav-link text-light" href="#"> 本地病案数据 <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active" v-on:click='getTables'>
-          <a class="nav-link text-light" href="#"> 选择数据表 <span class="sr-only">(current)</span></a>
+          <a class="nav-link text-light" href="#"> 服务器病案数据 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='getTables'>
+          <a class="nav-link text-light" href="#"> 校验数据 <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active" v-on:click='compareTable'>
-          <a class="nav-link text-light" href="#"> 对照数据 <span class="sr-only">(current)</span></a>
+          <a class="nav-link text-light" href="#"> 调用Drg分组服务 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='compareTable'>
+          <a class="nav-link text-light" href="#"> 查看Drg分组结果 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='compareTable'>
+          <a class="nav-link text-light" href="#"> 查看Drg分组规则 <span class="sr-only">(current)</span></a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -24,9 +33,6 @@
 </template>
 
 <script>
-  const fs = require('fs');
-  const path = require('path');
-  const basePath = path.format({ dir: 'C:\\hitbdata' });
   export default {
     data() {
       return {
@@ -34,11 +40,8 @@
       };
     },
     methods: {
-      loadPath: function () {},
-      getFiles: function () {
-        const files = fs.readdirSync(basePath)
-        this.$store.commit('SET_TOOLBAR', 'files');
-        this.$store.commit('GET_FILES', files);
+      loadPath: function () {
+        this.$store.commit('GET_PATH', 'paths');
       },
       getTables: function () {
         const tables = Object.keys(global.hitbdata.table)
@@ -47,18 +50,6 @@
       },
       compareTable: function () {
         this.$store.commit('SET_TOOLBAR', 'compareTable');
-      },
-      checkTable: function () {
-        this.$store.commit('SET_TOOLBAR', 'checkTable');
-      },
-      loadTable: function () {
-        this.$store.commit('SET_TOOLBAR', 'loadTable');
-      },
-      compDrg: function () {
-        this.$store.commit('SET_TOOLBAR', 'compDrg');
-      },
-      upLoadTableData: function () {
-        this.$store.commit('SET_TOOLBAR', 'upLoadTableData');
       },
     },
   };
