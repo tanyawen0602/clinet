@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div style="height:400px; overflow-y:auto;">
     <table>
       <tr>
-        <th class="table-danger"> 术语字典文件</th>
+        <th class="table-danger"> 数据分析文件</th>
       </tr>
       <tr v-for="(data, index) in xs" v-bind:key='index' v-on:click="loadFile(data, index)" v-bind:class="{'table-danger':flag == index}">
         <td>{{data}}</td>
@@ -22,14 +22,14 @@
     computed: {
       xs: {
         get() {
-          return this.$store.state.Library.files
+          return this.$store.state.Stat.files
         }
       }
     },
     methods: {
       loadFile: function (data, index) {
-        this.flag = index;
-        loadFile(this, data, 'library')
+        this.flag = index
+        loadFile(this, data, 'stat')
       },
     },
   };

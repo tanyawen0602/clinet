@@ -6,33 +6,30 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" v-on:click='loadData'>
-          <a class="nav-link text-light" href="#"> 本地文件 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active" v-on:click='serverData'>
-          <a class="nav-link text-light" href="#"> 远程文件 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link text-light" href="#"> 前一页 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link text-light" href="#"> 后一页 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
+        <li class="nav-item active" v-on:click='help'>
           <a class="nav-link text-light" href="#"> 帮助 <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" href="#"> 列表 </a>
+        <li class="nav-item active" v-on:click='loadData'>
+          <a class="nav-link text-light" href="#"> 本地 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='serverData'>
+          <a class="nav-link text-light" href="#"> 远程 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link text-light" href="#"> 前页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link text-light" href="#"> 后页 <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             选择
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">输入框提示</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="#">病案历史</a>
+            <a class="dropdown-item" href="#">病案参考</a>
           </div>
         </li>
       </ul>
@@ -52,7 +49,12 @@
       };
     },
     methods: {
+      help: function () {
+        this.$store.commit('EDIT_SET_RIGHT_PANEL', 'help');
+      },
       loadData: function () {
+        this.$store.commit('EDIT_SET_LAST_NAV', 'edit');
+        this.$store.commit('EDIT_SET_RIGHT_PANEL', 'local');
         this.$store.commit('EDIT_LOAD_FILES');
       },
       serverData: function () {

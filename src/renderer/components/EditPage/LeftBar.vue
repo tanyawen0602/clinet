@@ -6,30 +6,43 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" v-on:click="load">
-          <a class="nav-link text-light" href="#"> 返回上级菜单 <span class="sr-only">(current)</span></a>
+        <li class="nav-item active" v-on:click="lastNav">
+          <a class="nav-link text-light" href="#"> 返回 <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-on:click="toDoc">
+          <a class="nav-link text-light" href="#">编辑</a>
+        </li>
+        <li class="nav-item" v-on:click="toTable">
+          <a class="nav-link text-light" href="#">列表</a>
+        </li>
+        <li class="nav-item active" v-on:click='page(-1)'>
+          <a class="nav-link text-light" href="#"> 前页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='page(1)'>
+          <a class="nav-link text-light" href="#"> 后页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item" v-on:click="newDoc">
           <a class="nav-link text-light" href="#">新建</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-on:click="save">
           <a class="nav-link text-light" href="#">保存</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" href="#">另存为</a>
+        <li class="nav-item" v-on:click="saveOther">
+          <a class="nav-link text-light" href="#">另存</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-on:click="del">
           <a class="nav-link text-light" href="#">删除</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            编辑
+            选择
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">病案首页（卫统四）</a>
+            <a class="dropdown-item" href="#">病案首页</a>
+            <a class="dropdown-item" href="#">首次病程</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="#">疾病名称</a>
           </div>
         </li>
       </ul>
@@ -49,19 +62,30 @@
       };
     },
     methods: {
-      load: function () {
-        this.$router.push('/stat');
+      lastNav: function () {
+        this.$router.push(this.$store.state.Edit.lastNav);
       },
-      created: function () {
-        this.$nextTick(function () {
-          this.timer()
-        })
+      toTable: function () {
+        this.$store.commit('EDIT_SET_LEFT_PANEL', 'table')
       },
-      timer: function () {
-        this.getTime = () => {
-          this.currentTime = new Date().toLocaleString();
-        }
-        setInterval(this.getTime, 1000);
+      toDoc: function () {
+        this.$store.commit('EDIT_SET_LEFT_PANEL', 'doc')
+      },
+      newDoc: function () {
+        this.$store.commit('EDIT_SET_DOC')
+        this.$store.commit('EDIT_SET_LEFT_PANEL', 'doc')
+      },
+      page: function (n) {
+        this.$store.commit('EDIT_SET_FILE_PAGE', n);
+      },
+      save: function () {
+
+      },
+      saveOther: function () {
+
+      },
+      del: function () {
+
       },
     },
   };

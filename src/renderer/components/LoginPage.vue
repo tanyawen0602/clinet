@@ -8,27 +8,51 @@
           <div class="left-side">
             <form>
               <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
+                <label for="exampleInputEmail1" class="text-danger">注册的Email地址</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
               </div>
               <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
+                <label for="exampleInputPassword1" class="text-danger">用户密码</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
               </div>
             </form>
-            <button class="btn btn-primary" v-on:click="login">登陆</button>
-            <div v-if="hasData">
-              <hr>
-              <a href="static/hitb_table.csv">请点击下载系统初始化文件，并放到C盘的hitbdata/system目录下，然后关闭这个应用系统，再重新打开！</a>
-              <hr>
-            </div>
-
+            <button class="btn btn-outline-primary" v-on:click="login">登陆</button>
           </div>
         </main>
       </div>
       <div class="col-6">
         系统说明：
+        <hr />
+        <div v-if="!hasData">
+          <p>
+            本系统包括4部分功能：
+            <ul>
+              <li>以底部固定输入框为完全操作方式的通用编辑器</li>
+              <li>以疾病诊断和手术/操作为基础的术语字典</li>
+              <li>以DRG分析为核心的医疗管理评价分析</li>
+              <li>以远程服务或区块链服务为基础的医疗共享网络</li>
+            </ul>
+          </p>
+          <p>
+            本系统适用于4个应用场景：
+            <ul>
+              <li>作为单机版使用，数据以CSV文件的格式保存在本地</li>
+              <li>使用互联网上的远程服务，数据上传到服务器</li>
+              <li>使用互联网上的区块链服务，数据发布到区块链</li>
+              <li>
+                <a href="#" v-on:click="open('http://www.hitb.com.cn')">联系我们</a>                
+                ，建立自己私有的远程服务或区块链服务</li>
+            </ul>
+          </p>
+        </div>
+        <div v-if="hasData">
+          <h2 class="text-danger">
+            {{notice}}
+          </h2>
+          <hr>
+          <a href="static/hitb_table.csv">请点击下载系统初始化文件，按照提示操作，然后关闭这个应用系统，再重新打开！</a>
+          <hr>
+        </div>
       </div>
     </div>
     <notice-bar></notice-bar>
@@ -46,6 +70,13 @@
         hasData: false
       };
     },
+    computed: {
+      notice: {
+        get() {
+          return this.$store.state.Home.notice
+        }
+      }
+    },
     methods: {
       open(link) {
         this.$electron.shell.openExternal(link);
@@ -54,10 +85,11 @@
         if (global.hitbdata.table) {
           this.$store.commit('SET_NOTICE', '未注册用户登陆！');
           this.$store.commit('SET_NAVBAR', 'home');
+          this.$store.commit('HAS_DATA');
           this.$router.push('/home');
         } else {
           this.hasData = true;
-          this.$store.commit('SET_NOTICE', '读取系统初始化文件失败，请重新下载，放到C盘的hitbdata/system目录下！')
+          this.$store.commit('SET_NOTICE', `读取系统初始化文件失败，请重新下载，放到${global.hitbdata.path.system}目录下！`)
         }
       }
     },
@@ -97,6 +129,10 @@
 
   form {
     padding-bottom: 0;
+  }
+
+  label {
+    border: 0;
   }
 
 </style>
