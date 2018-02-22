@@ -16,7 +16,7 @@
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
               </div>
             </form>
-            <button class="btn btn-outline-primary" v-on:click="login">登陆</button>
+            <button id="login" class="btn btn-outline-primary" v-on:click="login">登陆</button>
           </div>
         </main>
       </div>
@@ -36,7 +36,7 @@
           <p>
             本系统适用于4个应用场景：
             <ul>
-              <li>作为单机版使用，数据以CSV文件的格式保存在本地</li>
+              <li>作为单机版使用，数据以CSV文件（完全结构化，用于系统配置、数据分析、术语字典）、CDA文件（半结构化，用于临床文档）保存在本地</li>
               <li>使用互联网上的远程服务，数据上传到服务器</li>
               <li>使用互联网上的区块链服务，数据发布到区块链</li>
               <li>
@@ -49,9 +49,6 @@
           <h2 class="text-danger">
             {{notice}}
           </h2>
-          <hr>
-          <a href="static/hitb_table.csv">请点击下载系统初始化文件，按照提示操作，然后关闭这个应用系统，再重新打开！</a>
-          <hr>
         </div>
       </div>
     </div>
@@ -60,8 +57,11 @@
 </template>
 
 <script>
+  import axios from 'axios';
+  // import qs from 'qs';
   import NavBar from './HomePage/NavBar';
   import NoticeBar from './HomePage/NoticeBar';
+  // const agent = require('superagent');
   export default {
     name: 'login-page',
     components: { NavBar, NoticeBar },
@@ -89,8 +89,31 @@
           this.$router.push('/home');
         } else {
           this.hasData = true;
-          this.$store.commit('SET_NOTICE', `读取系统初始化文件失败，请重新下载，放到${global.hitbdata.path.system}目录下！`)
+          this.$store.commit('SET_NOTICE', '初次启动，读取系统初始化文件，请先关闭系统，再打开！')
         }
+      },
+      log() {
+        console.log('aaaaaaaaaa')
+        const conf = {
+          baseURL: 'http://www.baidu.com',
+          method: 'GET',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          withCredentials: true,
+          xsrfCookieName: 'XSRF-TOKEN',
+          xsrfHeaderName: 'X-XSRF-TOKEN',
+        }
+        axios('/', conf).catch((error) => {
+          console.log(error.config)
+        });
+        // axios.get('http://www.baidu.com')
+        //   .set('headers': {'Content-Type': 'application/x-www-form-urlencoded'})
+        //   .then((res) => {
+        //     console.log(res)
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
+        // console.log(agent)
       }
     },
   };

@@ -22,11 +22,22 @@
       xs: {
         get() {
           const f = []
-          let fileLen = this.$store.state.Library.file.length;
+          let start = 0
+          let fileLen = this.$store.state.Library.tableSel.length;
           // console.log(fileLen)
-          if (fileLen > 99) { fileLen = 99 }
-          for (let i = 0; i < fileLen; i += 1) {
-            f.push(this.$store.state.Library.file[i].split(','))
+          if (fileLen > 99) {
+            if (this.$store.state.Library.tablePage > 0) {
+              start = 100 * this.$store.state.Library.tablePage
+              fileLen = start + 99
+            } else {
+              fileLen = 99
+            }
+          }
+          if (fileLen > this.$store.state.Library.tableSel.length) {
+            fileLen = this.$store.state.Library.tableSel.length
+          }
+          for (let i = start; i < fileLen; i += 1) {
+            f.push(this.$store.state.Library.tableSel[i])
           }
           return f
         }

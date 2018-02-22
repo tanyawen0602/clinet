@@ -6,16 +6,16 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" v-on:click='loadPath'>
+        <li class="nav-item active" v-on:click='getServers'>
           <a class="nav-link text-light" href="#"> 服务器节点列表 <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active" v-on:click='loadPath'>
+        <li class="nav-item active" v-on:click='setNodes'>
           <a class="nav-link text-light" href="#"> 设置连接节点 <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active" v-on:click='loadPath'>
+        <li class="nav-item active" v-on:click='blockChainInfo'>
           <a class="nav-link text-light" href="#"> 区块链服务介绍 <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active" v-on:click='loadPath'>
+        <li class="nav-item active" v-on:click='blockChainFunction'>
           <a class="nav-link text-light" href="#"> 区块链服务功能列表 <span class="sr-only">(current)</span></a>
         </li>
       </ul>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+  import loadFile from '../../utils/LoadFile';
   export default {
     data() {
       return {
@@ -34,8 +35,18 @@
       };
     },
     methods: {
-      loadPath: function () {
-        this.$store.commit('GET_PATH', 'paths');
+      getServers: function () {
+        loadFile(this, 'hitb_blockchain.csv', 'block')
+        this.$store.commit('BLOCK_SET_TOOLBAR', 'getServers');
+      },
+      setNodes: function () {
+        this.$store.commit('BLOCK_SET_TOOLBAR', 'setNodes');
+      },
+      blockChainInfo: function () {
+        this.$store.commit('BLOCK_SET_TOOLBAR', 'blockChainInfo');
+      },
+      blockChainFunction: function () {
+        this.$store.commit('BLOCK_SET_TOOLBAR', 'blockChainFunction');
       },
     },
   };

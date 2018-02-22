@@ -6,44 +6,47 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" v-on:click="lastNav">
+        <li class="nav-item active" v-on:click="lastNav" v-if="this.$store.state.Edit.lastNav">
           <a class="nav-link text-light" href="#"> 返回 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item" v-on:click="toDoc">
-          <a class="nav-link text-light" href="#">编辑</a>
-        </li>
-        <li class="nav-item" v-on:click="toTable">
-          <a class="nav-link text-light" href="#">列表</a>
-        </li>
-        <li class="nav-item active" v-on:click='page(-1)'>
-          <a class="nav-link text-light" href="#"> 前页 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active" v-on:click='page(1)'>
-          <a class="nav-link text-light" href="#"> 后页 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item" v-on:click="newDoc">
-          <a class="nav-link text-light" href="#">新建</a>
-        </li>
-        <li class="nav-item" v-on:click="save">
-          <a class="nav-link text-light" href="#">保存</a>
-        </li>
-        <li class="nav-item" v-on:click="saveOther">
-          <a class="nav-link text-light" href="#">另存</a>
-        </li>
-        <li class="nav-item" v-on:click="del">
-          <a class="nav-link text-light" href="#">删除</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             选择
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">病案首页（卫统四）</a>
-            <a class="dropdown-item" href="#">病案首页</a>
-            <a class="dropdown-item" href="#">首次病程</a>
+            <a class="dropdown-item" href="#" v-on:click="newDoc">病案首页（卫统四CSV）</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">疾病名称</a>
+            <a class="dropdown-item" href="#" v-on:click="newDoc">入院申请</a>
+            <a class="dropdown-item" href="#" v-on:click="newDoc">首次病程</a>
+            <a class="dropdown-item" href="#" v-on:click="newDoc">病程记录</a>
+            <a class="dropdown-item" href="#" v-on:click="newDoc">病案首页</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" v-on:click="newDoc">门诊病案</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" v-on:click="newDoc">健康体检</a>
+            <div class="dropdown-divider"></div>
           </div>
+        </li>
+        <li class="nav-item" v-on:click="newDoc">
+          <a class="nav-link text-light" href="#">新建</a>
+        </li>
+        <li class="nav-item" v-on:click="save(1)">
+          <a class="nav-link text-light" href="#">保存</a>
+        </li>
+        <li class="nav-item" v-on:click="save(2)">
+          <a class="nav-link text-light" href="#">另存</a>
+        </li>
+        <li class="nav-item" v-on:click="save(0)">
+          <a class="nav-link text-light" href="#">删除</a>
+        </li>
+        <li class="nav-item" v-on:click="saveFile">
+          <a class="nav-link text-light" href="#">写文件</a>
+        </li>
+        <li class="nav-item active" v-on:click='page(-1)' v-if="this.$store.state.Edit.leftPanel == 'table'">
+          <a class="nav-link text-light" href="#"> 前页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" v-on:click='page(1)' v-if="this.$store.state.Edit.leftPanel == 'table'">
+          <a class="nav-link text-light" href="#"> 后页 <span class="sr-only">(current)</span></a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -54,7 +57,7 @@
 </template>
 
 <script>
-
+  import saveFile from '../../utils/SaveFile'
   export default {
     data() {
       return {
@@ -65,27 +68,39 @@
       lastNav: function () {
         this.$router.push(this.$store.state.Edit.lastNav);
       },
-      toTable: function () {
-        this.$store.commit('EDIT_SET_LEFT_PANEL', 'table')
-      },
-      toDoc: function () {
-        this.$store.commit('EDIT_SET_LEFT_PANEL', 'doc')
-      },
       newDoc: function () {
         this.$store.commit('EDIT_SET_DOC')
+        this.$store.commit('EDIT_SET_DOC_INDEX', [0, true])
+        this.$store.commit('EDIT_SET_FILE_INDEX', this.$store.state.Edit.file.length)
         this.$store.commit('EDIT_SET_LEFT_PANEL', 'doc')
+        document.getElementById('edit-input').focus()
       },
       page: function (n) {
         this.$store.commit('EDIT_SET_FILE_PAGE', n);
       },
-      save: function () {
-
+      saveFile: function () {
+        const x = this.$store.state.Edit.files[this.$store.state.Edit.filesIndex]
+        const p = this.$store.state.Edit.lastNav
+        saveFile(this, x, p)
       },
-      saveOther: function () {
-
-      },
-      del: function () {
-
+      save: function (n) {
+        const fileIndex = this.$store.state.Edit.fileIndex
+        const doc = this.$store.state.Edit.doc
+        switch (n) {
+          case 0:
+            this.$store.commit('EDIT_DELETE_DOC', fileIndex);
+            this.$store.commit('EDIT_SET_LEFT_PANEL', 'table');
+            this.$store.commit('EDIT_SET_RIGHT_PANEL', 'local');
+            break;
+          case 1:
+            this.$store.commit('EDIT_SAVE_DOC', [fileIndex, doc.toString()]);
+            break;
+          case 2:
+            this.$store.commit('EDIT_ADD_DOC', doc.toString());
+            break;
+          default:
+            break;
+        }
       },
     },
   };
