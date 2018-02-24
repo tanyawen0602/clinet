@@ -86,9 +86,11 @@
       loadData: function () {
         this.$store.commit('STAT_SET_LEFT_PANEL', ['file', null]);
         this.$store.commit('STAT_LOAD_FILES');
+        this.$store.commit('STAT_SET_NOTICE', '选择本地文件');
       },
       serverData: function () {
         this.$store.commit('STAT_SERVER_FILES');
+        this.$store.commit('STAT_SET_NOTICE', '选择远程文件')
       },
       page: function (n) {
         this.$store.commit('STAT_TABLE_PAGE', n);
@@ -97,9 +99,12 @@
         this.$store.commit('EDIT_SET_LAST_NAV', '/stat');
         this.$store.commit('EDIT_SET_RIGHT_PANEL', 'local');
         this.$router.push('/edit');
+        this.$store.commit('STAT_SET_NOTICE', '以跳转至编辑数据页面');
       },
       selX: function (x) {
         this.$store.commit('STAT_SET_LEFT_PANEL', ['dimension', x]);
+        const notice = '选择维度:'.concat(x)
+        this.$store.commit('STAT_SET_NOTICE', notice);
       },
       showChart: function (id, type) {
         if (id === 'chartRight') {
@@ -119,6 +124,8 @@
               break;
             default: break;
           }
+          const notice = '右图切换为'.concat(type)
+          this.$store.commit('STAT_SET_NOTICE', notice);
         } else {
           // this.$store.commit('SET_CHART_LEFT', type);
           switch (type) {
@@ -136,6 +143,8 @@
               break;
             default: break;
           }
+          const notice = '左图切换为'.concat(type)
+          this.$store.commit('STAT_SET_NOTICE', notice);
         }
       },
       compare: function () {
