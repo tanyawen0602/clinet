@@ -27,6 +27,9 @@ const state = {
 };
 
 const mutations = {
+  SET_NOTICE(state, notice) {
+    state.notice = notice;
+  },
   STAT_LOAD_FILES() {
     const files = fs.readdirSync(global.hitbdata.path.stat).filter(x => x.endsWith('.csv'))
     state.files = files;
